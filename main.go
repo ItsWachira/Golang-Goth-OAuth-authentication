@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	// Set gin to release mode
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
@@ -19,6 +20,7 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
+	// Load .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -29,26 +31,29 @@ func main() {
 	clientSecret := os.Getenv("CLIENT_SECRET")
 	clientCallbackURL := os.Getenv("CLIENT_CALLBACK_URL")
 
+	// Check if environment variables are set
 	if clientID == "" || clientSecret == "" || clientCallbackURL == "" {
 		log.Fatal("Environment variables (CLIENT_ID, CLIENT_SECRET, CLIENT_CALLBACK_URL) are required")
 	}
 
-	log.Println("Server running: http://localhost:8080")
-
+	// Set the index route
 	r.LoadHTMLGlob("templates/*")
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 
+	// Set the index route
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "Main website",
 		})
 	})
 
+	// Set the routes
 	r.GET("/auth/:provider", SignInWithProvider)
 	r.GET("/auth/:provider/callback", CallbackHandler)
 	r.GET("/success", Success)
 
 	// Start the server
+	log.Println("Server running: http://localhost:8080")
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Server failed to run: http://localhost:8080")
 	}
