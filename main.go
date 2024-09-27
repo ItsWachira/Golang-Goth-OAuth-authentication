@@ -15,7 +15,13 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+
+	r := gin.New()
+
+	// Create a new Gin engine with Logger and Recovery middleware
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
 	err := godotenv.Load()
 	if err != nil {
