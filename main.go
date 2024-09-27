@@ -14,8 +14,6 @@ import (
 	"github.com/markbates/goth/providers/google"
 )
 
-
-
 func main() {
 	r := gin.Default()
 
@@ -37,13 +35,15 @@ func main() {
 
 	r.LoadHTMLGlob("templates/*")
 
-	
 	r.GET("/", home)
 	r.GET("/auth/:provider", signInWithProvider)
 	r.GET("/auth/:provider/callback", callbackHandler)
 	r.GET("/success", Success)
 
-	r.Run(":5000")
+	err = r.Run(":5000")
+	if err != nil {
+		return
+	}
 }
 
 func home(c *gin.Context) {
@@ -80,7 +80,6 @@ func callbackHandler(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	
 
 	c.Redirect(http.StatusTemporaryRedirect, "/success")
 }
