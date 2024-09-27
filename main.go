@@ -40,9 +40,8 @@ func main() {
 	r.GET("/auth/:provider/callback", callbackHandler)
 	r.GET("/success", Success)
 
-	err = r.Run(":5000")
-	if err != nil {
-		return
+	if err := r.Run(":5000"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
 	}
 }
 
