@@ -43,7 +43,7 @@ func main() {
 	// Set the index route
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "Main website",
+			"headTitle": "Sign in with Google",
 		})
 	})
 
